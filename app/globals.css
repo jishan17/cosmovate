@@ -4270,3 +4270,205 @@ select:focus-visible {
     transform: none !important;
   }
 }
+
+/* =========================================================
+   COSMOVATE LITE MODE
+   User-controlled performance mode for low-end devices.
+   Keeps all content and functionality; removes expensive motion/effects.
+   ========================================================= */
+
+.cosmo-lite-toggle {
+  position: absolute;
+z-index: 30;
+top: 20px;
+right: max(20px, env(safe-area-inset-right));
+bottom: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 11px;
+  border: 1px solid rgba(141, 182, 255, .38);
+  border-radius: 999px;
+  color: #eaf2ff;
+  background: rgba(7, 22, 42, .94);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .3), 0 0 22px rgba(71, 123, 219, .13);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .25px;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.cosmo-lite-toggle:hover {
+  border-color: rgba(160, 202, 255, .78);
+  background: #102b4c;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .34), 0 0 24px rgba(71, 123, 219, .22);
+}
+
+.cosmo-lite-toggle svg {
+  width: 13px;
+  height: 13px;
+  fill: #9fc5ff;
+  flex: 0 0 auto;
+}
+
+.cosmo-lite-toggle.is-enabled {
+  border-color: rgba(91, 220, 180, .55);
+  background: rgba(7, 39, 39, .96);
+}
+
+.cosmo-lite-toggle.is-enabled svg { fill: #6de3bd; }
+
+.cosmo-lite-status {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #71839b;
+}
+
+.cosmo-lite-toggle.is-enabled .cosmo-lite-status { background: #6de3bd; }
+
+.cosmo-lite-toggle:focus-visible {
+  outline: 2px solid #9fc5ff;
+  outline-offset: 4px;
+}
+
+/* Lite mode: freeze decorative motion and remove costly transitions. */
+html.cosmovate-lite-mode,
+html.cosmovate-lite-mode body {
+  scroll-behavior: auto !important;
+}
+
+html.cosmovate-lite-mode *,
+html.cosmovate-lite-mode *::before,
+html.cosmovate-lite-mode *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+  caret-color: auto;
+}
+
+/* Keep the starfield as a static texture, but remove moving particles. */
+html.cosmovate-lite-mode .hero-stars,
+html.cosmovate-lite-mode .domain-detail-stars,
+html.cosmovate-lite-mode .research-page-stars {
+  animation: none !important;
+  will-change: auto !important;
+}
+
+html.cosmovate-lite-mode .hero-stars::before,
+html.cosmovate-lite-mode .hero-stars::after,
+html.cosmovate-lite-mode .shooting-star,
+html.cosmovate-lite-mode .moon-orbit,
+html.cosmovate-lite-mode .planet-moon,
+html.cosmovate-lite-mode .floating-star,
+html.cosmovate-lite-mode .research-feature-star,
+html.cosmovate-lite-mode .research-feature-art::after {
+  display: none !important;
+}
+
+/* Remove large blurred glows, animated dust and expensive filters. */
+html.cosmovate-lite-mode .hero-glow,
+html.cosmovate-lite-mode .join-background,
+html.cosmovate-lite-mode .join-section::before,
+html.cosmovate-lite-mode .hero::before,
+html.cosmovate-lite-mode .hero::after {
+  display: none !important;
+}
+
+html.cosmovate-lite-mode .planet,
+html.cosmovate-lite-mode .planet-light,
+html.cosmovate-lite-mode .planet-shadow,
+html.cosmovate-lite-mode .orbit,
+html.cosmovate-lite-mode .orbit-one,
+html.cosmovate-lite-mode .orbit-two,
+html.cosmovate-lite-mode .orbit-three,
+html.cosmovate-lite-mode .domain-orb,
+html.cosmovate-lite-mode .domain-orbit-line,
+html.cosmovate-lite-mode .research-feature-planet,
+html.cosmovate-lite-mode .research-feature-orbit,
+html.cosmovate-lite-mode .research-card-art-orb,
+html.cosmovate-lite-mode .research-card-art-ring {
+  filter: none !important;
+  box-shadow: none !important;
+  will-change: auto !important;
+}
+
+/* Avoid scroll-reveal content being left partially hidden. */
+html.cosmovate-lite-mode [data-reveal],
+html.cosmovate-lite-mode [data-scroll-reveal],
+html.cosmovate-lite-mode [data-animate="reveal"],
+html.cosmovate-lite-mode .about-grid,
+html.cosmovate-lite-mode .mission-heading,
+html.cosmovate-lite-mode .mission-values > div,
+html.cosmovate-lite-mode .explore-heading,
+html.cosmovate-lite-mode .domain-card,
+html.cosmovate-lite-mode .leadership-heading,
+html.cosmovate-lite-mode .leader-card,
+html.cosmovate-lite-mode .research-heading,
+html.cosmovate-lite-mode .research-feature,
+html.cosmovate-lite-mode .research-bottom,
+html.cosmovate-lite-mode .research-article-card,
+html.cosmovate-lite-mode .research-article-body > *,
+html.cosmovate-lite-mode .research-source,
+html.cosmovate-lite-mode .join-content {
+  opacity: 1 !important;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+/* Simplify hover effects without changing links, buttons or page features. */
+html.cosmovate-lite-mode .domain-card-link:hover,
+html.cosmovate-lite-mode .domain-card:hover,
+html.cosmovate-lite-mode .leader-card:hover,
+html.cosmovate-lite-mode .research-article-card:hover,
+html.cosmovate-lite-mode .research-feature:hover,
+html.cosmovate-lite-mode .domain-topic:hover,
+html.cosmovate-lite-mode .social-icon:hover,
+html.cosmovate-lite-mode .button-primary:hover {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+html.cosmovate-lite-mode .site-header,
+html.cosmovate-lite-mode .apply-card {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html.cosmovate-lite-mode .cosmo-lite-toggle {
+  animation: none !important;
+  transition: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+@media (max-width: 480px) {
+  .cosmo-lite-toggle {
+    right: max(14px, env(safe-area-inset-right));
+    top: 14px;
+    bottom: auto;
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 10px;
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cosmo-lite-toggle { transition: none; }
+}
+
+
+/* NAVBAR SPACE RESERVED FOR THE LITE MODE CONTROL */
+@media (min-width: 1101px) {
+  .navbar {
+    padding-right: 120px;
+  }
+}

@@ -41,9 +41,6 @@ const domains = [
 
 const navigation = [
   { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Explore", href: "#explore" },
-  { label: "Our Mission", href: "#mission" },
   { label: "Gallery", href: "/gallery" },
   { label: "Live Space Updates", href: "/live-space-updates" },
 ];
