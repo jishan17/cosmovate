@@ -2,6 +2,7 @@
 import Image from "next/image";
 import ScrollAnimations from "./components/ScrollAnimations";
 import CosmicPopups from "./components/CosmicPopups";
+import GalleryPreview from "./components/GalleryPreview";
 
 const domains = [
   {
@@ -43,6 +44,8 @@ const navigation = [
   { label: "About", href: "#about" },
   { label: "Explore", href: "#explore" },
   { label: "Our Mission", href: "#mission" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Live Space Updates", href: "/live-space-updates" },
 ];
 
 const socialLinks = [
@@ -208,6 +211,10 @@ export default function Home() {
               <a href="#about" className="button button-secondary">
                 Discover our story <span>↓</span>
               </a>
+
+              <a href="/live-space-updates" className="button button-secondary">
+                🛰️ Live Space Updates <span>↗</span>
+              </a>
             </div>
 
             <div className="hero-caption">
@@ -251,7 +258,7 @@ export default function Home() {
       <section data-scroll-reveal className="about-section section-padding" id="about">
         <div className="container about-grid">
           <div>
-            <span className="section-label">01 / WHO WE ARE</span>
+            <span className="section-label">02 / WHO WE ARE</span>
             <h2>
               A universe of
               <br />
@@ -279,7 +286,7 @@ export default function Home() {
       {/* Mission */}
       <section data-scroll-reveal className="mission-section section-padding" id="mission">
         <div className="container">
-          <span className="section-label">02 / OUR PURPOSE</span>
+          <span className="section-label">03 / OUR PURPOSE</span>
 
           <div className="mission-heading" data-scroll-reveal>
             <h2>
@@ -318,7 +325,7 @@ export default function Home() {
         <div className="container">
           <div className="explore-heading" data-scroll-reveal>
             <div>
-              <span className="section-label">03 / EXPLORE THE COSMOS</span>
+              <span className="section-label">04 / EXPLORE THE COSMOS</span>
               <h2>
                 The universe,
                 <br />
@@ -357,12 +364,170 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Cosmic Challenges */}
+      <section
+        data-scroll-reveal
+        className="section-padding relative overflow-hidden bg-[#071426]"
+        id="challenges"
+      >
+        <div className="pointer-events-none absolute -left-32 top-10 h-80 w-80 rounded-full bg-blue-500/10 blur-[110px]" />
+        <div className="pointer-events-none absolute -right-32 bottom-0 h-80 w-80 rounded-full bg-violet-500/10 blur-[110px]" />
+
+        <div className="container relative z-10">
+          <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div data-scroll-reveal>
+              <span className="section-label">05 / TEST YOUR COSMIC KNOWLEDGE</span>
+              <h2 className="mt-4 text-4xl font-semibold leading-tight text-white md:text-5xl">
+                Think you know
+                <br />
+                <span className="text-cyan-300">the universe?</span>
+              </h2>
+            </div>
+            <div className="max-w-xl" data-scroll-reveal>
+              <p className="text-base leading-7 text-slate-300">
+                Put your curiosity to the test. Take on interactive space-science
+                missions, challenge your knowledge and earn XP as you explore.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-3 text-xs font-semibold tracking-wider text-cyan-100">
+                <span className="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2">PLAY WITHOUT LOGIN</span>
+                <span className="rounded-full border border-blue-300/20 bg-blue-300/10 px-4 py-2">EARN EXPLORER XP</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4" data-scroll-stagger>
+            {[
+              {
+                number: "01",
+                title: "Astronomy",
+                description: "Explore stars, planets, galaxies and the Solar System.",
+                icon: "✦",
+                color: "from-cyan-400/20 to-blue-500/5",
+                accent: "text-cyan-200",
+              },
+              {
+                number: "02",
+                title: "Astrophysics",
+                description: "Test your understanding of gravity, stars and spacetime.",
+                icon: "◉",
+                color: "from-violet-400/20 to-blue-500/5",
+                accent: "text-violet-200",
+              },
+              {
+                number: "03",
+                title: "Space Exploration",
+                description: "Take on questions about rockets and historic space missions.",
+                icon: "🚀",
+                color: "from-blue-400/20 to-cyan-500/5",
+                accent: "text-blue-200",
+              },
+              {
+                number: "04",
+                title: "Cosmic Research",
+                description: "Investigate exoplanets, dark matter and cosmic mysteries.",
+                icon: "⌘",
+                color: "from-fuchsia-400/20 to-violet-500/5",
+                accent: "text-fuchsia-200",
+              },
+            ].map((mission) => (
+              <a
+                key={mission.number}
+                href="/challenges"
+                className={`group relative flex min-h-[270px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br ${mission.color} p-6 no-underline transition duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:shadow-xl hover:shadow-cyan-950/30`}
+                aria-label={`Explore ${mission.title} challenges`}
+              >
+                <div className="flex items-start justify-between">
+                  <span className="text-xs font-bold tracking-[0.2em] text-slate-500">MISSION {mission.number}</span>
+                  <span className={`text-3xl ${mission.accent}`} aria-hidden="true">{mission.icon}</span>
+                </div>
+                <div className="mt-auto">
+                  <h3 className="text-xl font-bold text-white">{mission.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">{mission.description}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold tracking-widest text-cyan-200">
+                    ENTER MISSION <span className="transition-transform group-hover:translate-x-1">↗</span>
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-9 flex flex-col items-center justify-between gap-5 rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:flex-row sm:px-8">
+            <div>
+              <p className="text-lg font-semibold text-white">Your next discovery starts here.</p>
+              <p className="mt-1 text-sm text-slate-400">Four missions. Instant play. No player account required.</p>
+            </div>
+            <a
+              href="/challenges"
+              className="inline-flex shrink-0 items-center justify-center gap-3 rounded-full border border-cyan-300/40 bg-cyan-300/10 px-6 py-3 text-sm font-bold text-cyan-100 no-underline transition hover:bg-cyan-300/20"
+            >
+              Explore All Challenges <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Space Gallery */}
+      <GalleryPreview />
+
+
+
+      {/* Research & Publications */}
+      <section data-scroll-reveal className="research-section section-padding" id="research">
+        <div className="container">
+          <div className="research-heading" data-scroll-reveal>
+            <div>
+              <span className="section-label">07 / THE COSMIC NOTEBOOK</span>
+              <h2>Ideas beyond <span>our atmosphere.</span></h2>
+            </div>
+            <p>
+              Explore accessible explainers on astronomy and space science,
+              built from established research and trusted scientific sources.
+            </p>
+          </div>
+
+          <a className="research-feature" href="/research/exoplanets-how-we-find-worlds">
+            <div className="research-feature-art" data-scroll-reveal="zoom" aria-hidden="true">
+              <span className="research-feature-orbit research-feature-orbit-one" />
+              <span className="research-feature-orbit research-feature-orbit-two" />
+              <span className="research-feature-planet" />
+              <span className="research-feature-star">✦</span>
+              <span className="research-art-caption">FIELD NOTES / 001</span>
+            </div>
+            <div className="research-feature-copy" data-scroll-reveal>
+              <span className="research-kicker">FEATURED EXPLAINER · EXOPLANETS</span>
+              <h3>How do we find worlds around distant stars?</h3>
+              <p>
+                A look at the clever observational techniques that let
+                astronomers detect planets they cannot usually see directly.
+              </p>
+              <span className="research-read-link">READ THE EXPLAINER <span>↗</span></span>
+            </div>
+          </a>
+
+          <div className="research-bottom" data-scroll-reveal>
+            <div>
+              <span className="research-kicker">EXPLORE THE LIBRARY</span>
+              <h3>Curiosity, backed by evidence.</h3>
+            </div>
+            <p>
+              Browse explainers by topic, discover the science behind cosmic
+              phenomena and follow the original sources.
+            </p>
+            <a href="/research" className="button button-primary">
+              Visit Research & Publications <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+
+
       {/* Leadership */}
       <section data-scroll-reveal className="leadership-section section-padding" id="leadership">
         <div className="container">
           <div className="leadership-heading" data-scroll-reveal>
             <div>
-              <span className="section-label">04 / THE PEOPLE BEHIND COSMOVATE</span>
+              <span className="section-label">08 / THE PEOPLE BEHIND COSMOVATE</span>
               <h2>Meet our <span>leadership.</span></h2>
             </div>
             <p>Guided by curiosity. Driven by a shared vision to explore what lies beyond.</p>
@@ -411,60 +576,13 @@ export default function Home() {
       </section>
 
 
-      {/* Research & Publications */}
-      <section data-scroll-reveal className="research-section section-padding" id="research">
-        <div className="container">
-          <div className="research-heading" data-scroll-reveal>
-            <div>
-              <span className="section-label">05 / THE COSMIC NOTEBOOK</span>
-              <h2>Ideas beyond <span>our atmosphere.</span></h2>
-            </div>
-            <p>
-              Explore accessible explainers on astronomy and space science,
-              built from established research and trusted scientific sources.
-            </p>
-          </div>
 
-          <a className="research-feature" href="/research/exoplanets-how-we-find-worlds">
-            <div className="research-feature-art" data-scroll-reveal="zoom" aria-hidden="true">
-              <span className="research-feature-orbit research-feature-orbit-one" />
-              <span className="research-feature-orbit research-feature-orbit-two" />
-              <span className="research-feature-planet" />
-              <span className="research-feature-star">✦</span>
-              <span className="research-art-caption">FIELD NOTES / 001</span>
-            </div>
-            <div className="research-feature-copy" data-scroll-reveal>
-              <span className="research-kicker">FEATURED EXPLAINER · EXOPLANETS</span>
-              <h3>How do we find worlds around distant stars?</h3>
-              <p>
-                A look at the clever observational techniques that let
-                astronomers detect planets they cannot usually see directly.
-              </p>
-              <span className="research-read-link">READ THE EXPLAINER <span>↗</span></span>
-            </div>
-          </a>
-
-          <div className="research-bottom" data-scroll-reveal>
-            <div>
-              <span className="research-kicker">EXPLORE THE LIBRARY</span>
-              <h3>Curiosity, backed by evidence.</h3>
-            </div>
-            <p>
-              Browse explainers by topic, discover the science behind cosmic
-              phenomena and follow the original sources.
-            </p>
-            <a href="/research" className="button button-primary">
-              Visit Research & Publications <span>↗</span>
-            </a>
-          </div>
-        </div>
-      </section>
 
       {/* Recruitment */}
       <section data-scroll-reveal className="join-section section-padding" id="join">
         <div className="join-background" />
         <div className="container join-content" data-scroll-reveal>
-          <span className="section-label">06 / YOUR JOURNEY STARTS HERE</span>
+          <span className="section-label">09 / YOUR JOURNEY STARTS HERE</span>
           <h2>
             LOOK UP.
             <br />
