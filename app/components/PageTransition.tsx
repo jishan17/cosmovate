@@ -11,13 +11,16 @@ export default function PageTransition() {
   useEffect(() => {
     if (previousPath.current === pathname) return;
     previousPath.current = pathname;
+
+    // Lite Mode skips the full-screen cinematic transition.
+    if (document.documentElement.classList.contains("cosmovate-lite-mode")) {
+      setActive(false);
+      return;
+    }
+
     setActive(true);
-    const frame = window.requestAnimationFrame(() => {
-      window.setTimeout(() => setActive(false), 620);
-    });
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
+    const timeout = window.setTimeout(() => setActive(false), 620);
+    return () => window.clearTimeout(timeout);
   }, [pathname]);
 
   return (
@@ -86,6 +89,7 @@ export default function PageTransition() {
         @keyframes cosmoTransitionText { from { opacity: 0; translate: 0 12px; filter: blur(6px); } to { opacity: 1; translate: 0 0; filter: blur(0); } }
         @keyframes cosmoTransitionStarDrift { to { transform: translate3d(4%, -3%, 0); } }
         @media (prefers-reduced-motion: reduce) { .cosmo-page-transition, .cosmo-page-transition * { animation: none !important; transition-duration: .01ms !important; } }
+        html.cosmovate-lite-mode .cosmo-page-transition { display: none !important; }
       `}</style>
     </div>
   );
