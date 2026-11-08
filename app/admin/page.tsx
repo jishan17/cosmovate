@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "../../lib/supabase/server";
 import LogoutButton from "./components/logout-button";
 
+export const instant = false;
+
 type Application = {
   id: string;
   full_name: string;

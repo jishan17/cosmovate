@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createClient } from "../../../lib/supabase/server";
 import ApplicationManager from "./ApplicationManager";
 
+export const instant = false;
 
 export default async function ApplicationsPage() {
   const supabase = await createClient();
