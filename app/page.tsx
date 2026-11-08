@@ -61,38 +61,38 @@ const socialLinks = [
 ];
 
 function SocialIcon({ name }: { name: string }) {
-  if (name === "Instagram") {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <defs>
-          <linearGradient id="instagram-gradient" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0%" stopColor="#FFB347" />
-            <stop offset="50%" stopColor="#F04A75" />
-            <stop offset="100%" stopColor="#9B42D8" />
-          </linearGradient>
-        </defs>
-        <rect
-          x="3"
-          y="3"
-          width="18"
-          height="18"
-          rx="5"
-          fill="none"
-          stroke="url(#instagram-gradient)"
-          strokeWidth="2"
-        />
-        <circle
-          cx="12"
-          cy="12"
-          r="4"
-          fill="none"
-          stroke="url(#instagram-gradient)"
-          strokeWidth="2"
-        />
-        <circle cx="17.5" cy="6.8" r="1.2" fill="#F04A75" />
-      </svg>
-    );
-  }
+  
+if (name === "Instagram") {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="5"
+        stroke="#E85D91"
+        strokeWidth="2"
+      />
+      <circle
+        cx="12"
+        cy="12"
+        r="4"
+        stroke="#E85D91"
+        strokeWidth="2"
+      />
+      <circle cx="17.5" cy="6.8" r="1.2" fill="#E85D91" />
+    </svg>
+  );
+}
+
 
   if (name === "LinkedIn") {
     return (
