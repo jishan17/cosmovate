@@ -1,6 +1,7 @@
  "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import CelestialCalendarPreview from "../components/CelestialCalendarPreview";
 
 type ISSData = {
   latitude: number;
@@ -40,77 +41,6 @@ type SpaceWeather = {
 };
 
 type APIState = "loading" | "live" | "error";
-
-const skyEvents = [
-  {
-    name: "Leonids Meteor Shower",
-    month: 11,
-    day: 17,
-    description: "Fast meteors appearing to radiate from the constellation Leo.",
-    type: "METEOR SHOWER",
-    icon: "☄️",
-    note: "The peak can vary; dark skies away from city lights improve viewing.",
-  },
-  {
-    name: "Geminids Meteor Shower",
-    month: 12,
-    day: 14,
-    description: "One of the brightest and most reliable annual meteor showers.",
-    type: "METEOR SHOWER",
-    icon: "✨",
-    note: "Often best observed after midnight under a dark, clear sky.",
-  },
-  {
-    name: "Ursids Meteor Shower",
-    month: 12,
-    day: 22,
-    description: "A December meteor shower associated with Ursa Minor.",
-    type: "METEOR SHOWER",
-    icon: "🌠",
-    note: "Usually modest, with rates that can vary from year to year.",
-  },
-  {
-    name: "Quadrantids Meteor Shower",
-    month: 1,
-    day: 3,
-    description: "A short but potentially intense meteor shower in January.",
-    type: "METEOR SHOWER",
-    icon: "☄️",
-    note: "Its peak is brief, so the exact observing window matters.",
-  },
-  {
-    name: "Lyrids Meteor Shower",
-    month: 4,
-    day: 22,
-    description: "A recurring April meteor shower known for occasional bright meteors.",
-    type: "METEOR SHOWER",
-    icon: "🌌",
-    note: "Look toward the general sky; you do not need to stare directly at Lyra.",
-  },
-  {
-    name: "Eta Aquariids Meteor Shower",
-    month: 5,
-    day: 6,
-    description: "A meteor shower associated with debris from Halley's Comet.",
-    type: "METEOR SHOWER",
-    icon: "✨",
-    note: "Often more favourable in the hours before dawn.",
-  },
-];
-
-function getUpcomingEvents() {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-  return skyEvents
-    .map((event) => {
-      let date = new Date(now.getFullYear(), event.month - 1, event.day);
-      if (date < today) date = new Date(now.getFullYear() + 1, event.month - 1, event.day);
-      return { ...event, actualDate: date };
-    })
-    .sort((a, b) => a.actualDate.getTime() - b.actualDate.getTime())
-    .slice(0, 6);
-}
 
 function formatDate(date: string) {
   const parsed = new Date(date);
@@ -184,7 +114,6 @@ export default function LiveSpaceUpdatesPage() {
   const [refreshing, setRefreshing] = useState(false);
   // Start with a stable value; read the current time after the client mounts.
   const [clock, setClock] = useState(0);
-  const [events, setEvents] = useState<ReturnType<typeof getUpcomingEvents>>([]);
 
   const loadISS = useCallback(async () => {
     try {
@@ -287,7 +216,6 @@ export default function LiveSpaceUpdatesPage() {
 
   useEffect(() => {
     setClock(Date.now());
-    setEvents(getUpcomingEvents());
     refreshAll();
     const issTimer = window.setInterval(loadISS, 5000);
     const weatherTimer = window.setInterval(loadSpaceWeather, 5 * 60 * 1000);
@@ -601,30 +529,7 @@ export default function LiveSpaceUpdatesPage() {
         </section>
 
         <section className="mb-12">
-          <div className="mb-5">
-            <SectionLabel>05 / COSMIC EVENTS CALENDAR</SectionLabel>
-            <h2 className="mt-2 text-2xl font-black sm:text-3xl">Look up. Something is happening.</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
-              Annual meteor-shower peak dates are approximate calendar guides, not live forecasts. Check a current astronomy calendar closer to the date for the year's predicted peak, Moon phase and local visibility.
-            </p>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {events.map((event) => (
-              <article key={event.name} className="flex gap-4 rounded-2xl border border-white/10 bg-[#0a1729] p-5 transition hover:border-violet-300/30">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-violet-400/10 text-3xl">{event.icon}</div>
-                <div className="min-w-0">
-                  <p className="text-[9px] font-bold tracking-widest text-violet-300">{event.type}</p>
-                  <h3 className="mt-2 font-bold">{event.name}</h3>
-                  <p className="mt-2 text-xs leading-5 text-slate-400">{event.description}</p>
-                  <p className="mt-3 text-xs font-bold text-cyan-200">
-                    Approx. peak: {event.actualDate.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
-                  </p>
-                  <p className="mt-2 text-[10px] leading-5 text-slate-500">{event.note}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+          <CelestialCalendarPreview />
         </section>
 
         <footer className="border-t border-white/10 py-8 text-center">

@@ -3,6 +3,7 @@ import Image from "next/image";
 import ScrollAnimations from "./components/ScrollAnimations";
 import CosmicPopups from "./components/CosmicPopups";
 import GalleryPreview from "./components/GalleryPreview";
+import CelestialCalendarPreview from "./components/CelestialCalendarPreview";
 
 const domains = [
   {
@@ -465,6 +466,13 @@ export default function Home() {
 
       {/* Space Gallery */}
       <GalleryPreview />
+
+      {/* Celestial Calendar */}
+      <section className="section-padding" id="celestial-calendar">
+        <div className="container">
+          <CelestialCalendarPreview />
+        </div>
+      </section>
 
 
 
