@@ -1,16 +1,26 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "cosmovate_lite_mode";
 const MODE_EVENT = "cosmovate:lite-mode-change";
 
 export default function LiteModeToggle() {
+  const pathname = usePathname();
   const [liteMode, setLiteMode] = useState(false);
   const [ready, setReady] = useState(false);
 
+  const isAdmin = pathname.startsWith("/admin");
+
   useEffect(() => {
+    if (isAdmin) {
+      document.documentElement.classList.remove("cosmovate-lite-mode");
+      document.documentElement.dataset.liteMode = "false";
+      setReady(true);
+      return;
+    }
+
     try {
       const savedMode = window.localStorage.getItem(STORAGE_KEY) === "true";
       setLiteMode(savedMode);
@@ -21,7 +31,9 @@ export default function LiteModeToggle() {
     }
 
     setReady(true);
-  }, []);
+  }, [isAdmin]);
+
+  if (isAdmin) return null;
 
   function toggleLiteMode() {
     const nextMode = !liteMode;
