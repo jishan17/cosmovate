@@ -13,17 +13,22 @@ export default async function ApplicationsPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/admin/login");
+  if (!user) {
+    redirect("/admin/login");
+  }
 
-  const { data: member } = await supabase
+  const { data: member, error: memberError } = await supabase
     .from("team_members")
-    .select("role")
+    .select("role, is_active")
     .eq("user_id", user.id)
     .maybeSingle();
 
-  const allowedRoles = ["super_admin", "admin", "reviewer"];
-
-  if (!member || !allowedRoles.includes(member.role)) {
+  if (
+    memberError ||
+    !member ||
+    member.role !== "super_admin" ||
+    member.is_active !== true
+  ) {
     redirect("/admin");
   }
 
@@ -46,13 +51,15 @@ export default async function ApplicationsPage() {
 
         <header className="mb-8 mt-8">
           <p className="text-xs font-semibold tracking-[0.25em] text-blue-300">
-            COSMOVATE ADMINISTRATION
+            COSMOVATE SUPER ADMINISTRATION
           </p>
+
           <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
             Application Management
           </h1>
+
           <p className="mt-2 text-sm text-slate-400">
-            Review applicants, manage recruitment and collaborate with your team.
+            Review applicants and manage COSMOVATE recruitment.
           </p>
         </header>
 

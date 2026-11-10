@@ -4,54 +4,69 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "../../../lib/supabase/server";
 
-const allowedRoles = ["super_admin", "admin", "reviewer"];
-const editableRoles = ["super_admin", "admin"];
-const allowedStatuses = ["Pending", "Shortlisted", "Accepted", "Rejected"];
+const allowedStatuses = [
+  "Pending",
+  "Shortlisted",
+  "Accepted",
+  "Rejected",
+] as const;
 
 async function getAuthorisedMember() {
   const supabase = await createClient();
 
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (authError || !user) {
     throw new Error("You must sign in first.");
   }
 
-  const { data: member } = await supabase
+  const { data: member, error: memberError } = await supabase
     .from("team_members")
-    .select("role")
+    .select("role, is_active")
     .eq("user_id", user.id)
     .maybeSingle();
 
-  if (!member || !allowedRoles.includes(member.role)) {
-    throw new Error("You are not authorised.");
+  if (
+    memberError ||
+    !member ||
+    member.role !== "super_admin" ||
+    member.is_active !== true
+  ) {
+    throw new Error("Only an active Super Admin is authorised.");
   }
 
-  return { supabase, user, role: member.role };
+  return { supabase, user };
 }
 
 export async function updateApplicationStatus(
   applicationId: string,
   status: string
 ) {
-  const { supabase, role } = await getAuthorisedMember();
+  const { supabase } = await getAuthorisedMember();
 
-  if (!editableRoles.includes(role)) {
-    throw new Error("You do not have permission to update statuses.");
+  if (!applicationId || !allowedStatuses.includes(
+    status as (typeof allowedStatuses)[number]
+  )) {
+    throw new Error("Invalid application ID or status.");
   }
 
-  if (!allowedStatuses.includes(status)) {
-    throw new Error("Invalid application status.");
-  }
-
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("applications")
     .update({ status })
-    .eq("id", applicationId);
+    .eq("id", applicationId)
+    .select("id")
+    .maybeSingle();
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("Application not found or update not permitted.");
+  }
 
   revalidatePath("/admin");
   revalidatePath("/admin/applications");
@@ -62,13 +77,19 @@ export async function updateApplicationStatus(
 export async function getApplicationNotes(applicationId: string) {
   const { supabase } = await getAuthorisedMember();
 
+  if (!applicationId) {
+    throw new Error("Application ID is required.");
+  }
+
   const { data, error } = await supabase
     .from("application_notes")
     .select("id, application_id, author_id, note, created_at")
     .eq("application_id", applicationId)
     .order("created_at", { ascending: false });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    throw new Error(error.message);
+  }
 
   return data ?? [];
 }
@@ -80,6 +101,10 @@ export async function addApplicationNote(
   const { supabase, user } = await getAuthorisedMember();
 
   const cleanNote = note.trim();
+
+  if (!applicationId) {
+    throw new Error("Application ID is required.");
+  }
 
   if (!cleanNote || cleanNote.length > 5000) {
     throw new Error("Notes must contain between 1 and 5000 characters.");
@@ -93,7 +118,9 @@ export async function addApplicationNote(
       note: cleanNote,
     });
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    throw new Error(error.message);
+  }
 
   revalidatePath("/admin/applications");
 
