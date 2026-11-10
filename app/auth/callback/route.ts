@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const requestedNext = searchParams.get("next");
 
-  // Only allow local application redirects.
   const next =
     requestedNext?.startsWith("/") &&
     !requestedNext.startsWith("//") &&
@@ -24,9 +23,12 @@ export async function GET(request: NextRequest) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+
+    console.error("Auth callback code exchange failed:", error.message);
   }
 
+  // Hash tokens are processed by the browser, not this server route.
   return NextResponse.redirect(
-    `${origin}/admin/login?error=invitation_failed`
+    `${origin}/auth/complete?next=${encodeURIComponent(next)}`
   );
 }
