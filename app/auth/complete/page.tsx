@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "../../../lib/supabase/client";
 
-export default function AuthCompletePage() {
+function InvitationHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [message, setMessage] = useState("Verifying your invitation...");
@@ -50,11 +50,15 @@ export default function AuthCompletePage() {
 
       if (error) {
         console.error("Invitation session error:", error.message);
-        setMessage("Unable to verify invitation. Please request a new invitation.");
+
+        if (!cancelled) {
+          setMessage(
+            "Unable to verify invitation. Please request a new invitation."
+          );
+        }
         return;
       }
 
-      // Remove tokens from the browser address bar.
       window.history.replaceState(
         null,
         "",
@@ -93,5 +97,21 @@ export default function AuthCompletePage() {
         </p>
       </section>
     </main>
+  );
+}
+
+export default function AuthCompletePage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-[#061326] px-5 text-white">
+          <p className="text-sm text-slate-400">
+            Preparing invitation verification...
+          </p>
+        </main>
+      }
+    >
+      <InvitationHandler />
+    </Suspense>
   );
 }
